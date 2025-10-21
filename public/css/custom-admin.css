@@ -1,0 +1,276 @@
+/* Custom enhancements for Admin Portal */
+
+/* Sidebar gradient */
+.bg-gradient-primary {
+    background-color: #4e73df;
+    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    background-size: cover;
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+/* Button enhancements */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+}
+
+/* DataTable styling */
+#dataTable th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+#dataTable tbody tr {
+    transition: all 0.2s ease;
+}
+
+#dataTable tbody tr:hover {
+    background-color: #f8f9fc;
+    transform: scale(1.01);
+}
+
+/* Image preview styling */
+.img-fluid {
+    transition: transform 0.3s ease;
+}
+
+.img-fluid:hover {
+    transform: scale(1.05);
+}
+
+/* Alert animations */
+.alert {
+    animation: slideInDown 0.5s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Form enhancements */
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Card border colors */
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+
+/* Stat card animations */
+.card.border-left-primary,
+.card.border-left-success,
+.card.border-left-info,
+.card.border-left-warning {
+    position: relative;
+    overflow: hidden;
+}
+
+.card.border-left-primary::before,
+.card.border-left-success::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1));
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.card:hover::before {
+    transform: translateX(100%);
+}
+
+/* Badge styles */
+.badge {
+    padding: 0.5em 0.75em;
+    font-weight: 600;
+}
+
+/* Empty state styling */
+.text-gray-500 {
+    color: #858796;
+}
+
+.text-gray-400 {
+    color: #d1d3e2;
+}
+
+/* Sidebar toggle animation */
+#sidebarToggle,
+#sidebarToggleTop {
+    transition: all 0.3s ease;
+}
+
+#sidebarToggle:hover,
+#sidebarToggleTop:hover {
+    transform: rotate(180deg);
+}
+
+/* Topbar profile image */
+.img-profile {
+    width: 2rem;
+    height: 2rem;
+}
+
+/* Custom file input */
+.custom-file-label::after {
+    background: #4e73df;
+    color: white;
+}
+
+/* Loading animation for buttons */
+.btn.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 0 !important;
+    }
+    
+    .sidebar.toggled {
+        width: 14rem !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .topbar,
+    .btn,
+    .footer {
+        display: none !important;
+    }
+}
+
+/* Product Price Styling */
+.product-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745;
+    margin: 1rem 0;
+}
+
+.product-price-detail {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+}
+
+.product-price-detail .price {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.product-price-detail .price::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 40px;
+    background: #ffd700;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+/* Price in product cards */
+.product-card .product-price {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #28a745;
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+/* Table price styling */
+.table td .text-success {
+    font-size: 1.1rem;
+}

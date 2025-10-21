@@ -1,0 +1,126 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main class="main-content">
+    <div class="container">
+        <div class="customer-header">
+            <h1>Product Catalog</h1>
+            <p>Browse our collection of products</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="filter-section">
+            <form action="/" method="GET" class="filter-form" id="filterForm">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        id="searchInput"
+                        placeholder="Search products..." 
+                        value="<%= searchKeyword %>"
+                    >
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+
+                <div class="category-filter">
+                    <label for="category">Filter by Category:</label>
+                    <select name="category" id="category" onchange="this.form.submit()">
+                        <option value="">All Categories</option>
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat._id %>" <%= selectedCategory === cat._id.toString() ? 'selected' : '' %>>
+                                <%= cat.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <% if (searchKeyword || selectedCategory) { %>
+                    <a href="/" class="btn btn-secondary">Clear Filters</a>
+                <% } %>
+            </form>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <% if (products && products.length > 0) { %>
+                <% products.forEach((product, index) => { %>
+                    <div class="product-card" data-index="<%= index %>">
+                        <a href="/product/<%= product.slug %>">
+                            <div class="product-image">
+                                <img src="/uploads/<%= product.image %>" alt="<%= product.name %>">
+                            </div>
+                            <div class="product-info">
+                                <h3><%= product.name %></h3>
+                                <p class="category-badge"><%= product.category ? product.category.name : 'Uncategorized' %></p>
+                                <p class="product-price">$<%= product.price ? product.price.toFixed(2) : '0.00' %></p>
+                                <p class="product-excerpt"><%= product.description.substring(0, 100) %>...</p>
+                                <span class="view-details">View Details →</span>
+                            </div>
+                        </a>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="empty-state">
+                    <h2>No products found</h2>
+                    <p>Try adjusting your search or filter criteria.</p>
+                    <a href="/" class="btn btn-primary">View All Products</a>
+                </div>
+            <% } %>
+        </div>
+
+        <% if (products && products.length > 6) { %>
+        <div class="load-more-container" style="text-align: center; margin: 30px 0;">
+            <button id="loadMoreBtn" class="btn btn-primary btn-lg">Load More Products</button>
+            <p id="productCount" style="margin-top: 10px; color: #666;">
+                Showing <span id="currentCount">6</span> of <%= products.length %> products
+            </p>
+        </div>
+        <% } %>
+
+        <script>
+            // Load More functionality
+            const productsPerPage = 6;
+            let currentlyShowing = productsPerPage;
+            const allProducts = document.querySelectorAll('.product-card');
+            const totalProducts = allProducts.length;
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const currentCountSpan = document.getElementById('currentCount');
+
+            // Hide all products except first 6
+            function initializeProducts() {
+                allProducts.forEach((product, index) => {
+                    if (index >= productsPerPage) {
+                        product.style.display = 'none';
+                    }
+                });
+            }
+
+            // Load more products
+            function loadMore() {
+                const nextBatch = currentlyShowing + productsPerPage;
+                
+                allProducts.forEach((product, index) => {
+                    if (index < nextBatch) {
+                        product.style.display = 'block';
+                    }
+                });
+
+                currentlyShowing = Math.min(nextBatch, totalProducts);
+                currentCountSpan.textContent = currentlyShowing;
+
+                // Hide button if all products are shown
+                if (currentlyShowing >= totalProducts) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+
+            // Initialize on page load
+            if (totalProducts > productsPerPage) {
+                initializeProducts();
+                loadMoreBtn.addEventListener('click', loadMore);
+            }
+        </script>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

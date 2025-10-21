@@ -1,0 +1,136 @@
+<%- include('../../partials/head') %>
+<%- include('../../partials/header') %>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><%= category ? 'Edit Category' : 'Add New Category' %></h1>
+        <a href="/admin/categories" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Categories
+        </a>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <% } %>
+
+    <!-- Category Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">Category Information</h6>
+                </div>
+                <div class="card-body">
+                    <form action="<%= category ? `/admin/categories/edit/${category._id}` : '/admin/categories/add' %>" 
+                          method="POST">
+                        
+                        <div class="form-group">
+                            <label for="name" class="font-weight-bold">Category Name <span class="text-danger">*</span></label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="name" 
+                                   name="name" 
+                                   value="<%= category ? category.name : '' %>" 
+                                   placeholder="Enter category name (e.g., Electronics, Fashion, Books)"
+                                   required>
+                            <small class="form-text text-muted">
+                                <i class="fas fa-info-circle"></i> The slug will be automatically generated from the name
+                            </small>
+                        </div>
+
+                        <% if (category) { %>
+                            <div class="form-group">
+                                <label class="font-weight-bold">Current Slug</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-link"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" value="<%= category.slug %>" disabled>
+                                </div>
+                                <small class="form-text text-muted">This will update automatically when you change the name</small>
+                            </div>
+                        <% } %>
+
+                        <hr class="my-4">
+
+                        <div class="form-group mb-0">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save"></i> <%= category ? 'Update Category' : 'Add Category' %>
+                            </button>
+                            <a href="/admin/categories" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info"><i class="fas fa-info-circle"></i> Information</h6>
+                </div>
+                <div class="card-body">
+                    <h5 class="font-weight-bold">What is a Category?</h5>
+                    <p class="small text-gray-700">Categories help organize your products into logical groups, making it easier for customers to browse and find what they're looking for.</p>
+                    
+                    <hr>
+                    
+                    <h6 class="font-weight-bold">Quick Tips:</h6>
+                    <ul class="small text-gray-700">
+                        <li>Use clear, descriptive names</li>
+                        <li>Keep categories broad enough</li>
+                        <li>Avoid duplicate categories</li>
+                        <li>Use proper capitalization</li>
+                    </ul>
+                    
+                    <hr>
+                    
+                    <h6 class="font-weight-bold">Examples:</h6>
+                    <div class="mb-2">
+                        <span class="badge badge-success mr-1">Electronics</span>
+                        <span class="badge badge-success mr-1">Fashion</span>
+                        <span class="badge badge-success mr-1">Home & Garden</span>
+                        <span class="badge badge-success mr-1">Sports</span>
+                        <span class="badge badge-success">Books</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4 border-left-warning">
+                <div class="card-body">
+                    <div class="text-warning text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <p class="small font-weight-bold mb-0">
+                            Deleting a category will not delete associated products, but they may need recategorization.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+<%- include('../../partials/footer') %>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->

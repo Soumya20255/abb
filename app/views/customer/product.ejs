@@ -1,0 +1,48 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main class="main-content">
+    <div class="container">
+        <div class="product-detail">
+            <div class="breadcrumb">
+                <a href="/">Home</a> / 
+                <a href="/?category=<%= product.category._id %>"><%= product.category.name %></a> / 
+                <span><%= product.name %></span>
+            </div>
+
+            <div class="product-detail-content">
+                <div class="product-detail-image">
+                    <img src="/uploads/<%= product.image %>" alt="<%= product.name %>">
+                </div>
+
+                <div class="product-detail-info">
+                    <h1><%= product.name %></h1>
+                    
+                    <div class="product-meta">
+                        <span class="category-badge-large">
+                            <strong>Category:</strong> <%= product.category.name %>
+                        </span>
+                    </div>
+
+                    <div class="product-price-detail">
+                        <h2 class="price">$<%= product.price ? product.price.toFixed(2) : '0.00' %></h2>
+                    </div>
+
+                    <div class="product-description">
+                        <h3>Description</h3>
+                        <p><%= product.description %></p>
+                    </div>
+
+                    <div class="product-actions">
+                        <a href="/" class="btn btn-secondary">← Back to Products</a>
+                        <a href="/?category=<%= product.category._id %>" class="btn btn-primary">
+                            View More in <%= product.category.name %>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

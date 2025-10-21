@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main class="main-content">
+    <div class="container">
+        <div class="error-page">
+            <h1>Oops!</h1>
+            <h2><%= message %></h2>
+            <% if (error && error.stack && process.env.NODE_ENV === 'development') { %>
+                <pre class="error-stack"><%= error.stack %></pre>
+            <% } %>
+            <a href="/" class="btn btn-primary">Go to Homepage</a>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

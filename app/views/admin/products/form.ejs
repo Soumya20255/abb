@@ -1,0 +1,202 @@
+<%- include('../../partials/head') %>
+<%- include('../../partials/header') %>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><%= product ? 'Edit Product' : 'Add New Product' %></h1>
+        <a href="/admin/products" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Products
+        </a>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> <%= error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <% } %>
+
+    <!-- Product Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Product Information</h6>
+                </div>
+                <div class="card-body">
+                    <form action="<%= product ? `/admin/products/edit/${product._id}` : '/admin/products/add' %>" 
+                          method="POST" enctype="multipart/form-data">
+                        
+                        <div class="form-group">
+                            <label for="name" class="font-weight-bold">Product Name <span class="text-danger">*</span></label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="name" 
+                                   name="name" 
+                                   value="<%= product ? product.name : '' %>" 
+                                   placeholder="Enter product name"
+                                   required>
+                            <small class="form-text text-muted">Slug will be auto-generated from the name</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category" class="font-weight-bold">Category <span class="text-danger">*</span></label>
+                            <select class="form-control form-control-lg" id="category" name="category" required>
+                                <option value="">Select a category</option>
+                                <% categories.forEach(cat => { %>
+                                    <option value="<%= cat._id %>" 
+                                            <%= product && product.category && product.category._id.toString() === cat._id.toString() ? 'selected' : '' %>>
+                                        <%= cat.name %>
+                                    </option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price" class="font-weight-bold">Price <span class="text-danger">*</span></label>
+                            <div class="input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                                </div>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="price" 
+                                       name="price" 
+                                       value="<%= product ? product.price : '' %>" 
+                                       placeholder="0.00"
+                                       step="0.01"
+                                       min="0"
+                                       required>
+                            </div>
+                            <small class="form-text text-muted">Enter the product price in USD</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="font-weight-bold">Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" 
+                                      id="description" 
+                                      name="description" 
+                                      rows="6" 
+                                      placeholder="Enter product description"
+                                      required><%= product ? product.description : '' %></textarea>
+                            <small class="form-text text-muted">Provide detailed information about the product</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image" class="font-weight-bold">
+                                Product Image <%= product ? '(Leave empty to keep current image)' : '' %>
+                            </label>
+                            <div class="custom-file">
+                                <input type="file" 
+                                       class="custom-file-input" 
+                                       id="image" 
+                                       name="image" 
+                                       accept="image/*"
+                                       <%= !product ? 'required' : '' %>
+                                       onchange="previewImage(event)">
+                                <label class="custom-file-label" for="image">Choose file</label>
+                            </div>
+                            <small class="form-text text-muted">Accepted: JPG, PNG, GIF, WebP. Max: 5MB</small>
+                        </div>
+
+                        <% if (product) { %>
+                            <div class="form-group">
+                                <label class="font-weight-bold">Current Slug</label>
+                                <input type="text" class="form-control" value="<%= product.slug %>" disabled>
+                            </div>
+                        <% } %>
+
+                        <hr class="my-4">
+
+                        <div class="form-group mb-0">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> <%= product ? 'Update Product' : 'Add Product' %>
+                            </button>
+                            <a href="/admin/products" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Preview Column -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Image Preview</h6>
+                </div>
+                <div class="card-body text-center">
+                    <% if (product && product.image) { %>
+                        <img id="imagePreview" 
+                             src="/uploads/<%= product.image %>" 
+                             alt="<%= product.name %>" 
+                             class="img-fluid rounded" 
+                             style="max-height: 400px;">
+                        <p class="text-muted mt-2 small">Current Image</p>
+                    <% } else { %>
+                        <img id="imagePreview" 
+                             src="/img/undraw_posting_photo.svg" 
+                             alt="Preview" 
+                             class="img-fluid rounded" 
+                             style="max-height: 400px; opacity: 0.3;">
+                        <p class="text-muted mt-2 small">No image selected</p>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Quick Tips</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="small">
+                        <li>Use high-quality images</li>
+                        <li>Recommended size: 800x800px</li>
+                        <li>Keep descriptions clear and concise</li>
+                        <li>Choose appropriate category</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+<%- include('../../partials/footer') %>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<script>
+    // Custom file input label
+    $('.custom-file-input').on('change', function() {
+        let fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').html(fileName);
+    });
+
+    // Image preview
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const preview = document.getElementById('imagePreview');
+            preview.src = reader.result;
+            preview.style.opacity = '1';
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
